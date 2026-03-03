@@ -81,6 +81,7 @@ export default function ProssimaStagione() {
   const [direction, setDirection] = useState(1)
 
   const w = useWindowWidth()
+  const xs = w < 360
   const sm = w < 480
   const md = w < 768
 
@@ -229,7 +230,7 @@ export default function ProssimaStagione() {
       <div style={{ maxWidth: 900, margin: '0 auto', padding: sm ? '20px 12px 40px' : md ? '32px 24px 48px' : '48px 40px 80px' }}>
 
         {/* Month navigator */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: sm ? 4 : 6, marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: sm ? 4 : 6, flexWrap: 'wrap', marginBottom: 32 }}>
           <NavArrow
             direction="prev"
             onClick={() => goToMonth((currentMonthIdx - 1 + MESI.length) % MESI.length)}
@@ -244,7 +245,7 @@ export default function ProssimaStagione() {
                 key={mese.num}
                 onClick={() => goToMonth(i)}
                 style={{
-                  padding: sm ? '4px 8px' : '5px 14px',
+                  padding: xs ? '3px 6px' : sm ? '4px 8px' : '5px 14px',
                   borderRadius: 999,
                   fontFamily: 'var(--font-mono)',
                   fontSize: sm ? 11 : 12,

@@ -860,7 +860,7 @@ export default function Analytics() {
           {/* ── Q1 — KPI analitici ────────────────────────────────────────── */}
           <QuerySection
             index={1}
-            title="Quanto dura il mio impegno e come sfrutto il tempo"
+            title="Durata del mio impegno"
             accent={ACCENT_COLORS[0]}
             note="Questi numeri sono assolutamente ipotetici, ma realistici."
             sql={Q1_SQL}
