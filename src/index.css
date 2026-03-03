@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #FAFAF8;
+  --bg-secondary: #F1F1EF;
+  --text: #0F0F0D;
+  --text-muted: #6B6B63;
+  --accent: #1A1A2E;
+  --accent-warm: #C8622A;
+  --border: #E2E2DC;
+  --code-bg: #F4F4F0;
+
+  --font-sans: 'Geist', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* Prism.js custom light theme */
+code[class*="language-"],
+pre[class*="language-"] {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #383a42;
+  background: none;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.7;
+  tab-size: 2;
+  hyphens: none;
+}
+
+pre[class*="language-"] {
+  background: var(--code-bg);
+  padding: 1.25rem 1.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  overflow: auto;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #a0a1a7;
+  font-style: italic;
+}
+.token.punctuation { color: #383a42; }
+.token.keyword { color: #a626a4; }
+.token.operator { color: #0184bc; }
+.token.string { color: #50a14f; }
+.token.number { color: #986801; }
+.token.function { color: #4078f2; }
+.token.builtin { color: #c18401; }
+
+/* Scrollbar sottile */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
