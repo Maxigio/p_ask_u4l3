@@ -104,7 +104,7 @@ export default function Homepage() {
             color: 'var(--text-muted)',
             letterSpacing: '0.08em',
           }}>
-            Spero vada tutto bene!
+            Obiettivo: capire quanto, del mio tempo, può esserti utile per la stagione!
           </p>
         </motion.div>
 
