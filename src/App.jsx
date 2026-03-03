@@ -1,7 +1,7 @@
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import Homepage from './components/Homepage'
 import ProssimaStagione from './components/ProssimaStagione'
-import Backend from './components/Backend'
+import Analytics from './components/Analytics'
 import AlzareIlLivello from './components/AlzareIlLivello'
 
 export default function App() {
@@ -10,7 +10,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/prossima-stagione" element={<ProssimaStagione />} />
-        <Route path="/backend" element={<Backend />} />
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="/alzare-il-livello" element={<AlzareIlLivello />} />
       </Routes>
     </HashRouter>

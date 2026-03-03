@@ -157,7 +157,7 @@ export default function ProssimaStagione() {
             onMouseEnter={e => e.currentTarget.style.opacity = 1}
             onMouseLeave={e => e.currentTarget.style.opacity = 0.7}
           >
-            ← p_ask_u4l3
+            ← HUB
           </button>
 
           {/* Centered title block */}
@@ -238,7 +238,7 @@ export default function ProssimaStagione() {
 
           {MESI.map((mese, i) => {
             const isActive = i === currentMonthIdx
-            const isAgosto = mese.num === '2025-08'
+            const isAgosto = mese.num === '2026-08'
             return (
               <button
                 key={mese.num}
@@ -317,7 +317,7 @@ export default function ProssimaStagione() {
         {/* CTA */}
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 56 }}>
           <button
-            onClick={() => navigate('/backend')}
+            onClick={() => navigate('/analytics')}
             style={{
               padding: '12px 32px',
               borderRadius: 8,
@@ -387,7 +387,7 @@ function NavArrow({ direction, onClick, size = 30 }) {
 function MonthBlock({ mese, actsByDate, activeFilters, selectedDay, onDayClick,
                       monthPad = '28px 28px 24px', cellMinH = 72, cellGap = 4, numSize = 14, titleSize = 20 }) {
   const cells = generateMonthCells(mese.num)
-  const isAgosto = mese.num === '2025-08'
+  const isAgosto = mese.num === '2026-08'
 
   return (
     <div style={{ padding: monthPad }}>

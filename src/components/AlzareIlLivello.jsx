@@ -76,7 +76,7 @@ export default function AlzareIlLivello() {
           className="mono text-xs mb-8 flex items-center gap-2 transition-opacity hover:opacity-70"
           style={{ color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
         >
-          ← p_ask_u4l3
+          ← HUB
         </button>
 
         {/* Page header */}
