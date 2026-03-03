@@ -1,8 +1,18 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useDatabase } from '../hooks/useDatabase'
 import { runQuery } from '../utils/queryDb'
+
+function useWindowWidth() {
+  const [w, setW] = useState(() => typeof window !== 'undefined' ? window.innerWidth : 1024)
+  useEffect(() => {
+    const handler = () => setW(window.innerWidth)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
+  return w
+}
 
 const TIPO_COLORS = {
   riprese:   { bg: '#C8622A', light: '#FEF0E8', label: 'Riprese' },
@@ -70,6 +80,10 @@ export default function ProssimaStagione() {
   const [currentMonthIdx, setCurrentMonthIdx] = useState(0)
   const [direction, setDirection] = useState(1)
 
+  const w = useWindowWidth()
+  const sm = w < 480
+  const md = w < 768
+
   const actsByDate = useMemo(() => {
     if (!db) return {}
     const rows = runQuery(db, SQL_ATTIVITA)
@@ -128,7 +142,7 @@ export default function ProssimaStagione() {
 
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg)' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', padding: '32px 40px 40px' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', padding: sm ? '24px 16px 28px' : md ? '28px 24px 32px' : '32px 40px 40px' }}>
 
           {/* Back */}
           <button
@@ -165,7 +179,7 @@ export default function ProssimaStagione() {
             </p>
 
             <h1 style={{
-              fontSize: 48, fontWeight: 700, lineHeight: 1.1,
+              fontSize: sm ? 28 : md ? 36 : 48, fontWeight: 700, lineHeight: 1.1,
               color: 'var(--text)', marginBottom: 14, letterSpacing: '-0.02em',
             }}>
               Prossima Stagione
@@ -174,7 +188,7 @@ export default function ProssimaStagione() {
             <p style={{
               fontFamily: 'var(--font-mono)', fontSize: 11,
               color: 'var(--text-muted)', letterSpacing: '0.08em',
-              lineHeight: 1.5, maxWidth: 520, margin: '0 auto 36px',
+              lineHeight: 1.5, maxWidth: sm ? '100%' : 520, margin: '0 auto 36px',
             }}>
               Per dirlo in{' '}
               <span style={{ color: '#C8622A', fontWeight: 700 }}>&lt; 17 parole</span>
@@ -182,7 +196,7 @@ export default function ProssimaStagione() {
             </p>
 
             {/* Filter pills */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: sm ? 6 : 8 }}>
               {Object.entries(TIPO_COLORS).map(([tipo, { bg, light, label }]) => {
                 const active = activeFilters.has(tipo)
                 return (
@@ -212,13 +226,14 @@ export default function ProssimaStagione() {
       </div>
 
       {/* Calendar section */}
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '48px 40px 80px' }}>
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: sm ? '20px 12px 40px' : md ? '32px 24px 48px' : '48px 40px 80px' }}>
 
         {/* Month navigator */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: sm ? 4 : 6, marginBottom: 32 }}>
           <NavArrow
             direction="prev"
             onClick={() => goToMonth((currentMonthIdx - 1 + MESI.length) % MESI.length)}
+            size={sm ? 28 : 30}
           />
 
           {MESI.map((mese, i) => {
@@ -229,10 +244,10 @@ export default function ProssimaStagione() {
                 key={mese.num}
                 onClick={() => goToMonth(i)}
                 style={{
-                  padding: '5px 14px',
+                  padding: sm ? '4px 8px' : '5px 14px',
                   borderRadius: 999,
                   fontFamily: 'var(--font-mono)',
-                  fontSize: 12,
+                  fontSize: sm ? 11 : 12,
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: isActive ? 'var(--text)' : 'transparent',
                   color: isActive ? 'var(--bg)' : 'var(--text-muted)',
@@ -259,6 +274,7 @@ export default function ProssimaStagione() {
           <NavArrow
             direction="next"
             onClick={() => goToMonth((currentMonthIdx + 1) % MESI.length)}
+            size={sm ? 28 : 30}
           />
         </div>
 
@@ -287,6 +303,11 @@ export default function ProssimaStagione() {
                   activeFilters={activeFilters}
                   selectedDay={selectedDay}
                   onDayClick={handleDayClick}
+                  monthPad={sm ? '12px 12px 12px' : md ? '18px 18px 16px' : '28px 28px 24px'}
+                  cellMinH={sm ? 50 : 72}
+                  cellGap={sm ? 3 : 4}
+                  numSize={sm ? 11 : 14}
+                  titleSize={sm ? 16 : 20}
                 />
               </motion.div>
             </AnimatePresence>
@@ -340,12 +361,12 @@ export default function ProssimaStagione() {
 }
 
 // ── NavArrow ──────────────────────────────────────────────────
-function NavArrow({ direction, onClick }) {
+function NavArrow({ direction, onClick, size = 30 }) {
   return (
     <button
       onClick={onClick}
       style={{
-        width: 30, height: 30,
+        width: size, height: size,
         borderRadius: 8,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontFamily: 'var(--font-mono)', fontSize: 14,
@@ -363,16 +384,17 @@ function NavArrow({ direction, onClick }) {
 }
 
 // ── MonthBlock ────────────────────────────────────────────────
-function MonthBlock({ mese, actsByDate, activeFilters, selectedDay, onDayClick }) {
+function MonthBlock({ mese, actsByDate, activeFilters, selectedDay, onDayClick,
+                      monthPad = '28px 28px 24px', cellMinH = 72, cellGap = 4, numSize = 14, titleSize = 20 }) {
   const cells = generateMonthCells(mese.num)
   const isAgosto = mese.num === '2025-08'
 
   return (
-    <div style={{ padding: '28px 28px 24px' }}>
+    <div style={{ padding: monthPad }}>
       {/* Month title */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
         <h2 style={{
-          fontSize: 20, fontWeight: 700,
+          fontSize: titleSize, fontWeight: 700,
           color: 'var(--text)', letterSpacing: '-0.01em',
         }}>
           {mese.nome}
@@ -400,8 +422,8 @@ function MonthBlock({ mese, actsByDate, activeFilters, selectedDay, onDayClick }
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
-        gap: 4,
-        marginBottom: 4,
+        gap: cellGap,
+        marginBottom: cellGap,
       }}>
         {GIORNI_LABEL.map(g => (
           <div key={g} style={{
@@ -422,7 +444,7 @@ function MonthBlock({ mese, actsByDate, activeFilters, selectedDay, onDayClick }
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
-        gap: 4,
+        gap: cellGap,
       }}>
         {cells.map((dateStr, i) => {
           if (!dateStr) return <div key={`e-${i}`} />
@@ -436,6 +458,8 @@ function MonthBlock({ mese, actsByDate, activeFilters, selectedDay, onDayClick }
               acts={visibleActs}
               isSelected={selectedDay === dateStr}
               onClick={() => onDayClick(dateStr)}
+              minH={cellMinH}
+              numSize={numSize}
             />
           )
         })}
@@ -445,7 +469,7 @@ function MonthBlock({ mese, actsByDate, activeFilters, selectedDay, onDayClick }
 }
 
 // ── DayCell ───────────────────────────────────────────────────
-function DayCell({ dayNum, acts, isSelected, onClick }) {
+function DayCell({ dayNum, acts, isSelected, onClick, minH = 72, numSize = 14 }) {
   const hasActs = acts.length > 0
 
   // Tipi unici del giorno (deduplica, ordine di apparizione, max 4)
@@ -458,7 +482,7 @@ function DayCell({ dayNum, acts, isSelected, onClick }) {
       onClick={hasActs ? onClick : undefined}
       style={{
         borderRadius: 8,
-        minHeight: 72,
+        minHeight: minH,
         cursor: hasActs ? 'pointer' : 'default',
         transition: 'transform 120ms, box-shadow 120ms',
         position: 'relative',
@@ -510,7 +534,7 @@ function DayCell({ dayNum, acts, isSelected, onClick }) {
       }}>
         <div style={{
           fontFamily: 'var(--font-mono)',
-          fontSize: 14,
+          fontSize: numSize,
           fontWeight: hasActs ? 700 : 400,
           color: hasActs ? '#fff' : 'var(--text-muted)',
           opacity: hasActs ? 1 : 0.4,
